@@ -9,7 +9,6 @@ WORKDIR /server/
 COPY ./server/* ./
 RUN go build -o uno .
 
-
 FROM scratch
 WORKDIR /uno
 COPY --from=server /server/uno ./uno
