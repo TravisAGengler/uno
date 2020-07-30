@@ -9,6 +9,14 @@ export default {
         return BaseService.get("/newgame");
     },
 
+    async createNewGame(gameName, password) {
+        var data = {
+            "name" : gameName,
+            "password" : password
+        };
+        return BaseService.post("/games", data);
+    },
+
     update(gameId, userName) {
         return BaseService.get(`/update/${gameId}/${userName}`);
     },

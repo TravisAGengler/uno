@@ -18,6 +18,7 @@ func setupRoutes(e *echo.Echo) {
 	e.GET("/newgame", newGame)
 	e.GET("/update/:game/:username", update)
 	e.GET("/games", listGames)
+	e.POST("/games", createGame)
 	e.POST("/startgame/:game/:username", startGame)
 	e.POST("/login/:game/:username", login)
 	e.POST("/play/:game/:username/:number/:color", play)
@@ -47,6 +48,25 @@ func login(c echo.Context) error {
 func listGames(c echo.Context) error {
 	games := getGames()
 	return c.JSONPretty(http.StatusOK, games, "  ")
+}
+
+func createGame(c echo.Context) error {
+	jsonBody := echo.Map{}
+
+	if err := c.Bind(&jsonBody); err != nil {
+		return err
+	}
+
+	gameName := jsonBody["name"].(string)
+	gamePassword := jsonBody["password"].(string)
+
+	jsonResp, err := createGameFromLobby(gameName, gamePassword)
+
+	if err != nil {
+		return err
+	}
+
+	return c.JSONPretty(http.StatusOK, jsonResp, "  ")
 }
 
 func startGame(c echo.Context) error {
